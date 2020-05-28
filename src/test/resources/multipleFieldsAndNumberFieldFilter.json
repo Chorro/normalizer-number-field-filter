@@ -1,0 +1,6 @@
+{
+  "rules": [
+    {"dimension":  "DIM-A", "comparisonRules": { "eq": 0 }},
+    {"dimension":  "DIM-B", "comparisonRules": { "ne": 0 }}
+  ]
+}

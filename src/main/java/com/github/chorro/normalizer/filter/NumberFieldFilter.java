@@ -4,11 +4,11 @@ import io.wizzie.metrics.MetricsManager;
 import io.wizzie.normalizer.funcs.FilterFunc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NumberFieldFilter extends FilterFunc {
-  String dimension;
-  Map<NumberComparisonOperator, Number> rules = new HashMap<>();
+  Map<String, Map<NumberComparisonOperator, Number>> rules = new HashMap<>();
 
   private enum NumberComparisonOperator implements NumberComparison {
     EQ {
@@ -50,27 +50,36 @@ public class NumberFieldFilter extends FilterFunc {
   }
 
   @Override public void prepare(Map<String, Object> properties, MetricsManager metricsManager) {
-    dimension = (String) properties.get("dimension");
-    Map<String, Number> comparisonRules = (Map<String, Number>) properties.get("comparisonRules");
-    comparisonRules
-      .entrySet()
-      .forEach( entry -> {
-        rules.put(NumberComparisonOperator.valueOf(entry.getKey().toUpperCase()), entry.getValue());
-      });
+    List<Map<String, Object>> rules = (List<Map<String, Object>>) properties.get("rules");
+    rules.stream().forEach(rule -> {
+      if (rule.containsKey("dimension") && rule.containsKey("comparisonRules")) {
+           String dimension = (String) rule.get("dimension");
+           Map<NumberComparisonOperator, Number> comparisonRules = new HashMap<>();
 
+          ((Map<String, Number>) rule.get("comparisonRules"))
+            .entrySet()
+            .forEach(entry -> comparisonRules.put(NumberComparisonOperator.valueOf(entry.getKey().toUpperCase()), entry.getValue()));
+
+          this.rules.put(dimension, comparisonRules);
+      }
+    });
   }
 
   @Override public Boolean process(String key, Map<String, Object> value) {
     if (value != null) {
-      Object currentValue = value.get(dimension);
 
-      if (currentValue instanceof Number) {
-        Number currentValueNumber = (Number) currentValue;
-        return rules
-          .entrySet()
-          .stream()
-          .allMatch(entry -> entry.getKey().compare(currentValueNumber, entry.getValue()));
-      }
+      return this.rules.entrySet().stream().allMatch(
+        entry -> {
+          Object currentValue = value.get(entry.getKey());
+
+          return currentValue instanceof Number
+                 && entry
+                      .getValue()
+                      .entrySet()
+                      .stream()
+                      .allMatch(entry2 -> entry2.getKey().compare((Number) currentValue, entry2.getValue()));
+        }
+      );
     }
 
     return false;

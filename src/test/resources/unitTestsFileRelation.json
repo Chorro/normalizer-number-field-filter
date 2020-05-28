@@ -1,0 +1,5 @@
+{
+  "givenSimpleFilter_whenFilter_thenCorrect": "simpleNumberFieldFilter.json",
+  "givenMultipleNumberFilters_whenFilter_thenCorrect": "multipleNumberFieldFilters.json",
+  "givenMultipleDimensionsAndFilters_whenFilter_thenCorrect": "multipleFieldsAndNumberFieldFilter.json"
+}

@@ -1,0 +1,5 @@
+{
+  "rules": [
+    {"dimension":  "DIM-A", "comparisonRules": { "gt": 0 , "lt":  10}}
+  ]
+}
