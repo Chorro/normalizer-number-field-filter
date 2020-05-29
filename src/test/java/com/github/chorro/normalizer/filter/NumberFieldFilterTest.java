@@ -92,4 +92,21 @@ public class NumberFieldFilterTest {
     assertTrue(numberFieldFilter.process(null, message));
   }
 
+  @Test
+  public void givenMultipleDimensionsAndFilters_whenFilterAllOpearators_thenCorrect() {
+    NumberFieldFilter numberFieldFilter = new NumberFieldFilter();
+    numberFieldFilter.prepare(properties, null);
+
+    Map<String, Object> messsage = new HashMap<>();
+
+    messsage.put("DIM-EQ", 0);
+    messsage.put("DIM-NE", 7);
+    messsage.put("DIM-GT", 1);
+    messsage.put("DIM-GE", 2);
+    messsage.put("DIM-LT", -1);
+    messsage.put("DIM-LE", -2);
+
+    assertTrue(numberFieldFilter.process(null, messsage));
+  }
+
 }

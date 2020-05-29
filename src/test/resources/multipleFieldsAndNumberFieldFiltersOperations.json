@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {"dimension":  "DIM-EQ", "comparisonRules": { "eq": 0}},
+    {"dimension":  "DIM-NE", "comparisonRules": { "ne": 0}},
+    {"dimension":  "DIM-GT", "comparisonRules": { "gt": 0}},
+    {"dimension":  "DIM-GE", "comparisonRules": { "ge": 2}},
+    {"dimension":  "DIM-LT", "comparisonRules": { "lt": 0}},
+    {"dimension":  "DIM-LE", "comparisonRules": { "le": -2}}
+  ]
+}
